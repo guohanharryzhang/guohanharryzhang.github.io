@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>vasp-flow: DFT workflow CLI for an HPC cluster · Harry Zhang</title>
+<meta name="description" content="Harry Zhang, electrical engineering at Johns Hopkins: lab automation, mixed-signal circuits, embedded firmware and backend software.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../style.css"></head><body><main>
+<a class="back" href="/">← Harry Zhang</a>
+<h1>vasp-flow: DFT workflow CLI for an HPC cluster</h1><p class="kicker">Luo Research Lab | March to October 2026</p>
+<p class="lede">Running density-functional-theory calculations by hand meant juggling structure files, four VASP inputs, a Slurm script and SSH. vasp-flow walks through those steps, explains each one, and handles upload, submission and status checks.</p>
+
+<h2>What I did</h2><ul class="work"><li>Materials Project search and structure fetch, POSCAR/KPOINTS/INCAR generation from presets, POTCAR assembly on the cluster.</li><li>SSH and SCP transport with sbatch submission and squeue parsing; resumable per-job progress.</li><li>Used for the zinc surface-energy and adsorption study across three facets.</li></ul>
+
+<p class="tools"><b>Tools:</b> Python, pymatgen, paramiko, Slurm, VASP</p>
+<p><a href="https://github.com/guohanharryzhang/vasp-flow">vasp-flow on GitHub ↗</a></p>
+<footer>Guohan (Harry) Zhang · <a href="mailto:gzhang45@jh.edu">gzhang45@jh.edu</a> · <a href="https://github.com/guohanharryzhang">GitHub</a> · <a href="https://www.linkedin.com/in/harrygzhang/">LinkedIn</a> · Updated November 2026</footer>
+</main></body></html>

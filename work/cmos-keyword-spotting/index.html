@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CMOS keyword-spotting circuits · Harry Zhang</title>
+<meta name="description" content="Harry Zhang, electrical engineering at Johns Hopkins: lab automation, mixed-signal circuits, embedded firmware and backend software.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../style.css"></head><body><main>
+<a class="back" href="/">← Harry Zhang</a>
+<h1>CMOS keyword-spotting circuits</h1><p class="kicker">Introduction to VLSI, Johns Hopkins | Spring 2026 | Team project with Andrew Chae</p>
+<p class="lede">A schematic-level audio keyword detector. Two 1,024-stage shift registers feed weighted current-mode banks, and a threshold block flags a matched pattern. Designed in Cadence Virtuoso and simulated in Spectre with the gpdk045 kit.</p>
+<div class="results"><div><b>755 mV</b><span>matched input</span></div><div><b>272 mV</b><span>anti-matched input</span></div><div><b>526 mV</b><span>all taps active</span></div></div>
+<h2>What I did</h2><ul class="work"><li>Implemented transmission gates, inverters and flip-flops, then built the two 1,024-stage shift registers.</li><li>Built the current-mode bank subcells, bias circuits, the threshold block and the integration testbench.</li><li>Wrote Cadence SKILL generators for the tap cells, weighted branches and a net-label testbench so the repetitive cells were scripted rather than hand-drawn.</li><li>Helped map MATLAB-derived weights onto bias domains and debug integration.</li><li>The four-bank extension passed schematic and DC checks; disk limits on the course server stopped the full transient run. No layout or fabricated chip.</li></ul>
+<figure><img src="/assets/cmos_four_bank.png" alt="Team schematic from the final report: two shift-register paths feed four current-mode banks and the threshold stage." loading="lazy"><figcaption>Team schematic from the final report: two shift-register paths feed four current-mode banks and the threshold stage.</figcaption></figure><figure><img src="/assets/cmos_matched_test.png" alt="Matched-pattern simulation of the 16-tap demonstration bank, settling near 755 mV." loading="lazy"><figcaption>Matched-pattern simulation of the 16-tap demonstration bank, settling near 755 mV.</figcaption></figure>
+<p class="tools"><b>Tools:</b> Cadence Virtuoso, Spectre, SKILL, gpdk045, DC and transient simulation</p>
+<p><a href="https://github.com/guohanharryzhang/cmos-kws-skill">cmos-kws-skill on GitHub ↗</a></p>
+<footer>Guohan (Harry) Zhang · <a href="mailto:gzhang45@jh.edu">gzhang45@jh.edu</a> · <a href="https://github.com/guohanharryzhang">GitHub</a> · <a href="https://www.linkedin.com/in/harrygzhang/">LinkedIn</a> · Updated November 2026</footer>
+</main></body></html>
