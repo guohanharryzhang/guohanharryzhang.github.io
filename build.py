@@ -139,10 +139,9 @@ PROJECTS = [
 HONORS = "USACO Gold · AIME qualifier · CyberPatriot national semifinalist · National Merit Scholar · Eagle Scout"
 
 CSS = """
-:root{--bg:#fff;--fg:#111;--muted:#666;--line:#e6e6e6;--accent:#1f5f8b;--soft:#f3f3f3;--figbg:#fff;color-scheme:light}
-@media(prefers-color-scheme:dark){:root{--bg:#161a1f;--fg:#e6e8eb;--muted:#9aa1aa;--line:#2b313a;--accent:#8ab8dc;--soft:#1f252c;--figbg:#f4f4f4;color-scheme:dark}}
+:root{--bg:#22272e;--fg:#cdd9e5;--muted:#8b98a5;--line:#444c56;--accent:#6cb6ff;--soft:#2d333b;--figbg:#f4f4f4;color-scheme:dark}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;padding:0 20px}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif;padding:0 20px}
 main{max-width:700px;margin:0 auto;padding:60px 0 72px}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;text-underline-offset:3px}
 h1{font-size:30px;line-height:1.15;margin:0 0 6px;letter-spacing:-.01em}
@@ -197,9 +196,7 @@ def page(title, body, depth=0, path="/", description=None):
 <meta property="og:title" content="{html.escape(title)}"><meta property="og:description" content="{html.escape(description)}">
 <meta property="og:url" content="{SITE}{path}"><meta property="og:type" content="website">
 <link rel="canonical" href="{SITE}{path}">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css"></head><body><main>
+<link rel="stylesheet" href="/style.css?v=5"></head><body><main>
 {body}
 <footer><span>{NAME}</span><a href="mailto:{EMAIL}">{EMAIL}</a><a href="mailto:{EMAIL2}">{EMAIL2}</a><a href="{GH}">GitHub</a><a href="https://www.linkedin.com/in/harrygzhang/">LinkedIn</a><span>Updated November 2026</span></footer>
 </main></body></html>"""
