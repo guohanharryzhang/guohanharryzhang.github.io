@@ -8,7 +8,7 @@
 <link rel="canonical" href="https://guohanharryzhang.github.io/">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css?v=7"></head><body><div class="page"><main>
+<link rel="stylesheet" href="/style.css?v=8"></head><body><div class="page"><main>
 
 <header><h1>Guohan Harry Zhang</h1>
 <p class="lede">Electrical engineering at Johns Hopkins (B.S. 2028, Applied Mathematics minor, GPA 3.8). I build lab automation and measurement setups, mixed-signal circuits, embedded firmware, and the backends that run them. U.S. citizen, based in Baltimore.</p>
@@ -28,9 +28,31 @@ document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('clic
 </script>
 <footer><span>Guohan Harry Zhang</span><a href="mailto:gzhang45@jh.edu">gzhang45@jh.edu</a><a href="mailto:gzhang2006.mg21@gmail.com">gzhang2006.mg21@gmail.com</a><a href="https://github.com/guohanharryzhang">GitHub</a><a href="https://www.linkedin.com/in/harrygzhang/">LinkedIn</a><span>Updated November 2026</span></footer>
 </main><aside>
-<section><h2>Now</h2><p>Fall 2026 at Hopkins: Digital Signal Processing, Robot Sensors and Actuators, Probability and Statistics.</p><p>Evenings go to Scrawl AI and the Luo Lab bench.</p></section>
-<section><h2>Ask me about</h2><ul><li>Zinc-ion battery electrodeposition</li><li>Rendering equations in someone's handwriting</li><li>Current-mode CMOS pattern banks</li><li>Running VASP on a Slurm cluster</li><li>Finding zero sets with Gaussian processes</li></ul></section>
-<section><h2>Places</h2><p>Grew up in Southern California. Now Baltimore, with a summer in Newark, CA (Lucid) and one in Madrid (ICAI).</p></section>
-<section><figure><img src="/assets/lab_detail_small.jpg" alt="Electrodeposition bench in the Luo Lab" loading="lazy"><figcaption>The electrodeposition bench in the Luo Lab.</figcaption></figure></section>
-<section><h2>Elsewhere</h2><ul><li><a href="https://github.com/guohanharryzhang">GitHub</a></li><li><a href="https://www.linkedin.com/in/harrygzhang/">LinkedIn</a></li><li><a href="https://scrawlai.app/">scrawlai.app</a></li><li><a href="mailto:gzhang45@jh.edu">gzhang45@jh.edu</a></li></ul></section>
-</aside></div></body></html>
+<section><h2>Baltimore</h2><p class="clock" id="clock">--:--:--</p><p class="small" id="clocknote"></p></section>
+<section><h2>Square wave, one harmonic at a time</h2><canvas id="fx" width="480" height="200"></canvas>
+<label class="small"><span id="fxn">5 harmonics</span><input id="fxs" type="range" min="1" max="25" value="5"></label></section>
+<section><h2>Resistor decoder</h2><div class="res" id="res"><span class="lead"></span><span class="body"><i data-b="0"></i><i data-b="1"></i><i data-b="2"></i><i class="tol"></i></span><span class="lead"></span></div>
+<p class="small" id="resv"></p><p class="small">Click a band to change it.</p></section>
+<section><h2>Countdown</h2><p class="clock" id="grad"></p><p class="small">days until graduation, May 2028.</p></section>
+</aside>
+<script>
+(function(){
+const z=document.getElementById('clock'),zn=document.getElementById('clocknote');
+function tick(){const d=new Date();z.textContent=d.toLocaleTimeString('en-US',{timeZone:'America/New_York',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+const h=+d.toLocaleString('en-US',{timeZone:'America/New_York',hour:'numeric',hour12:false});zn.textContent=h<7?'Probably asleep.':h<9?'Coffee.':h<18?'In class or in the lab.':h<23?'Working on Scrawl.':'Should be asleep.';}
+tick();setInterval(tick,1000);
+const c=document.getElementById('fx'),g=c.getContext('2d'),s=document.getElementById('fxs'),n=document.getElementById('fxn');
+const acc=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(),mut=getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
+function draw(){const N=+s.value;n.textContent=N+(N===1?' harmonic':' harmonics');g.clearRect(0,0,c.width,c.height);
+g.strokeStyle=mut;g.globalAlpha=.35;g.lineWidth=2;g.beginPath();g.moveTo(0,c.height/2);g.lineTo(c.width,c.height/2);g.stroke();g.globalAlpha=1;
+g.strokeStyle=acc;g.lineWidth=3;g.beginPath();for(let i=0;i<=c.width;i++){const x=i/c.width*4*Math.PI;let y=0;for(let k=1;k<=N;k++){const m=2*k-1;y+=Math.sin(m*x)/m;}
+const py=c.height/2-y*(c.height*0.38);i?g.lineTo(i,py):g.moveTo(i,py);}g.stroke();}
+s.addEventListener('input',draw);draw();
+const cols=['black','brown','red','orange','yellow','green','blue','violet','grey','white'],hex=['#111','#6b3a1f','#c0392b','#e67e22','#f1c40f','#27ae60','#2980b9','#8e44ad','#7f8c8d','#ecf0f1'];
+const st=[4,7,2],bands=[...document.querySelectorAll('#res i[data-b]')],out=document.getElementById('resv');
+function fmt(v){const s=x=>String(parseFloat(x.toPrecision(3)));return v>=1e6?s(v/1e6)+' MΩ':v>=1e3?s(v/1e3)+' kΩ':s(v)+' Ω';}
+function show(){bands.forEach((b,i)=>{b.style.background=hex[st[i]];b.title=cols[st[i]];});const v=(st[0]*10+st[1])*Math.pow(10,st[2]);out.textContent=cols[st[0]]+', '+cols[st[1]]+', '+cols[st[2]]+', gold: '+fmt(v)+' ±5%';}
+bands.forEach((b,i)=>b.addEventListener('click',()=>{st[i]=(st[i]+1)%10;show();}));show();
+document.getElementById('grad').textContent=Math.max(0,Math.ceil((new Date('2028-05-25T00:00:00-04:00')-new Date())/864e5)).toLocaleString();
+})();
+</script></div></body></html>

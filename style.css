@@ -10,6 +10,11 @@ aside p{margin:0 0 8px}aside ul{margin:0;padding:0;list-style:none}aside li{marg
 aside a{color:var(--fg)}aside a:hover{color:var(--accent)}
 aside img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:3px}
 aside figure{margin:0}aside figcaption{font-size:12px;margin-top:6px}
+aside .clock{font:500 22px/1.2 "IBM Plex Mono",ui-monospace,monospace;color:var(--fg);margin:0 0 4px;font-variant-numeric:tabular-nums}
+aside .small{font-size:12px;margin:0 0 6px}
+aside label.small{display:block}aside input[type=range]{display:block;width:100%;margin:6px 0 0;accent-color:var(--accent)}
+aside canvas{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:3px;background:var(--soft);margin:0 0 8px}
+.res{display:flex;align-items:center;margin:4px 0 10px}.res .lead{flex:1;height:2px;background:var(--muted)}.res .body{display:flex;gap:9px;padding:0 12px;height:34px;align-items:center;background:#d8c7a8;border-radius:8px}.res i{display:block;width:9px;height:34px;cursor:pointer}.res i.tol{background:#c9a227;cursor:default;width:7px}
 @media(max-width:1179px){aside{display:none}}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;text-underline-offset:3px}
 h1{font-size:32px;font-weight:600;line-height:1.15;margin:0 0 6px;letter-spacing:-.015em}

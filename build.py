@@ -121,8 +121,11 @@ PROJECTS = [
   intro="A soda-can-sized payload for the CanSat competition. I worked on the sensor and firmware side of the team.",
   results=[],
   work=["Integrated and calibrated accelerometer, barometer and GPS measurements for descent and impact monitoring.",
-        "Wrote C/C++ firmware for sensor-data processing, flight-event logging and RF telemetry."],
-  figures=[], tools="C, C++, microcontrollers, RF telemetry, sensor calibration", links=[]),
+        "Wrote C/C++ firmware for sensor-data processing, flight-event logging and RF telemetry.",
+        "The flight computer is the team's Minmus board: an ESP32-WROOM-32 with a BMI088 IMU, ADXL377 high-g accelerometer, BMP390 barometer, SD card slot and USB-C programming. The board was designed by the AstroJays team; my work was on the firmware and sensor side."],
+  figures=[("cansat_minmus_board.jpg","Minmus flight computer, 3D render from the team's board design: ESP32 module, sensors, SD card, USB-C and power. AstroJays team design."),
+           ("cansat_minmus_schematic.png","Minmus schematic: 3.3 V LDO, BMP390 barometer, ADXL377 accelerometer, BMI088 IMU, ESP32, USB-C and SD card. AstroJays team design.")],
+  tools="C, C++, ESP32, BMI088, ADXL377, BMP390, RF telemetry, sensor calibration", links=[]),
 
  dict(slug="smaller-projects", title="Smaller projects", tag="software",
   kicker="Course and side projects",
@@ -151,6 +154,11 @@ aside p{margin:0 0 8px}aside ul{margin:0;padding:0;list-style:none}aside li{marg
 aside a{color:var(--fg)}aside a:hover{color:var(--accent)}
 aside img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:3px}
 aside figure{margin:0}aside figcaption{font-size:12px;margin-top:6px}
+aside .clock{font:500 22px/1.2 "IBM Plex Mono",ui-monospace,monospace;color:var(--fg);margin:0 0 4px;font-variant-numeric:tabular-nums}
+aside .small{font-size:12px;margin:0 0 6px}
+aside label.small{display:block}aside input[type=range]{display:block;width:100%;margin:6px 0 0;accent-color:var(--accent)}
+aside canvas{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:3px;background:var(--soft);margin:0 0 8px}
+.res{display:flex;align-items:center;margin:4px 0 10px}.res .lead{flex:1;height:2px;background:var(--muted)}.res .body{display:flex;gap:9px;padding:0 12px;height:34px;align-items:center;background:#d8c7a8;border-radius:8px}.res i{display:block;width:9px;height:34px;cursor:pointer}.res i.tol{background:#c9a227;cursor:default;width:7px}
 @media(max-width:1179px){aside{display:none}}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;text-underline-offset:3px}
 h1{font-size:32px;font-weight:600;line-height:1.15;margin:0 0 6px;letter-spacing:-.015em}
@@ -196,12 +204,34 @@ footer{margin-top:64px;padding-top:18px;border-top:1px solid var(--line);font:13
 """
 
 ASIDE = f"""<aside>
-<section><h2>Now</h2><p>Fall 2026 at Hopkins: Digital Signal Processing, Robot Sensors and Actuators, Probability and Statistics.</p><p>Evenings go to Scrawl AI and the Luo Lab bench.</p></section>
-<section><h2>Ask me about</h2><ul><li>Zinc-ion battery electrodeposition</li><li>Rendering equations in someone's handwriting</li><li>Current-mode CMOS pattern banks</li><li>Running VASP on a Slurm cluster</li><li>Finding zero sets with Gaussian processes</li></ul></section>
-<section><h2>Places</h2><p>Grew up in Southern California. Now Baltimore, with a summer in Newark, CA (Lucid) and one in Madrid (ICAI).</p></section>
-<section><figure><img src="/assets/lab_detail_small.jpg" alt="Electrodeposition bench in the Luo Lab" loading="lazy"><figcaption>The electrodeposition bench in the Luo Lab.</figcaption></figure></section>
-<section><h2>Elsewhere</h2><ul><li><a href="{GH}">GitHub</a></li><li><a href="https://www.linkedin.com/in/harrygzhang/">LinkedIn</a></li><li><a href="https://scrawlai.app/">scrawlai.app</a></li><li><a href="mailto:{EMAIL}">{EMAIL}</a></li></ul></section>
-</aside>"""
+<section><h2>Baltimore</h2><p class="clock" id="clock">--:--:--</p><p class="small" id="clocknote"></p></section>
+<section><h2>Square wave, one harmonic at a time</h2><canvas id="fx" width="480" height="200"></canvas>
+<label class="small"><span id="fxn">5 harmonics</span><input id="fxs" type="range" min="1" max="25" value="5"></label></section>
+<section><h2>Resistor decoder</h2><div class="res" id="res"><span class="lead"></span><span class="body"><i data-b="0"></i><i data-b="1"></i><i data-b="2"></i><i class="tol"></i></span><span class="lead"></span></div>
+<p class="small" id="resv"></p><p class="small">Click a band to change it.</p></section>
+<section><h2>Countdown</h2><p class="clock" id="grad"></p><p class="small">days until graduation, May 2028.</p></section>
+</aside>
+<script>
+(function(){{
+const z=document.getElementById('clock'),zn=document.getElementById('clocknote');
+function tick(){{const d=new Date();z.textContent=d.toLocaleTimeString('en-US',{{timeZone:'America/New_York',hour:'2-digit',minute:'2-digit',second:'2-digit'}});
+const h=+d.toLocaleString('en-US',{{timeZone:'America/New_York',hour:'numeric',hour12:false}});zn.textContent=h<7?'Probably asleep.':h<9?'Coffee.':h<18?'In class or in the lab.':h<23?'Working on Scrawl.':'Should be asleep.';}}
+tick();setInterval(tick,1000);
+const c=document.getElementById('fx'),g=c.getContext('2d'),s=document.getElementById('fxs'),n=document.getElementById('fxn');
+const acc=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(),mut=getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
+function draw(){{const N=+s.value;n.textContent=N+(N===1?' harmonic':' harmonics');g.clearRect(0,0,c.width,c.height);
+g.strokeStyle=mut;g.globalAlpha=.35;g.lineWidth=2;g.beginPath();g.moveTo(0,c.height/2);g.lineTo(c.width,c.height/2);g.stroke();g.globalAlpha=1;
+g.strokeStyle=acc;g.lineWidth=3;g.beginPath();for(let i=0;i<=c.width;i++){{const x=i/c.width*4*Math.PI;let y=0;for(let k=1;k<=N;k++){{const m=2*k-1;y+=Math.sin(m*x)/m;}}
+const py=c.height/2-y*(c.height*0.38);i?g.lineTo(i,py):g.moveTo(i,py);}}g.stroke();}}
+s.addEventListener('input',draw);draw();
+const cols=['black','brown','red','orange','yellow','green','blue','violet','grey','white'],hex=['#111','#6b3a1f','#c0392b','#e67e22','#f1c40f','#27ae60','#2980b9','#8e44ad','#7f8c8d','#ecf0f1'];
+const st=[4,7,2],bands=[...document.querySelectorAll('#res i[data-b]')],out=document.getElementById('resv');
+function fmt(v){{const s=x=>String(parseFloat(x.toPrecision(3)));return v>=1e6?s(v/1e6)+' M\u03a9':v>=1e3?s(v/1e3)+' k\u03a9':s(v)+' \u03a9';}}
+function show(){{bands.forEach((b,i)=>{{b.style.background=hex[st[i]];b.title=cols[st[i]];}});const v=(st[0]*10+st[1])*Math.pow(10,st[2]);out.textContent=cols[st[0]]+', '+cols[st[1]]+', '+cols[st[2]]+', gold: '+fmt(v)+' \u00b15%';}}
+bands.forEach((b,i)=>b.addEventListener('click',()=>{{st[i]=(st[i]+1)%10;show();}}));show();
+document.getElementById('grad').textContent=Math.max(0,Math.ceil((new Date('2028-05-25T00:00:00-04:00')-new Date())/864e5)).toLocaleString();
+}})();
+</script>"""
 
 def page(title, body, depth=0, path="/", description=None, aside=""):
     description = description or f"{NAME}, electrical engineering at Johns Hopkins: lab automation, mixed-signal circuits, embedded firmware and backend software."
@@ -215,7 +245,7 @@ def page(title, body, depth=0, path="/", description=None, aside=""):
 <link rel="canonical" href="{SITE}{path}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css?v=7"></head><body><div class="page"><main>
+<link rel="stylesheet" href="/style.css?v=8"></head><body><div class="page"><main>
 {body}
 <footer><span>{NAME}</span><a href="mailto:{EMAIL}">{EMAIL}</a><a href="mailto:{EMAIL2}">{EMAIL2}</a><a href="{GH}">GitHub</a><a href="https://www.linkedin.com/in/harrygzhang/">LinkedIn</a><span>Updated November 2026</span></footer>
 </main>{aside}</div></body></html>"""
