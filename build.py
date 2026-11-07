@@ -143,6 +143,15 @@ CSS = """
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 "IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;padding:0 20px}
 main{max-width:700px;margin:0 auto;padding:60px 0 72px}
+.page{max-width:700px;margin:0 auto}
+@media(min-width:1180px){.page{max-width:1020px;display:grid;grid-template-columns:700px 240px;column-gap:80px;align-items:start}.page main{max-width:none;margin:0;grid-column:1}.page aside{grid-column:2;position:sticky;top:60px;padding-top:60px}}
+aside{font-size:14px;color:var(--muted)}
+aside h2{margin:0 0 12px}aside section{margin:0 0 36px}
+aside p{margin:0 0 8px}aside ul{margin:0;padding:0;list-style:none}aside li{margin:0 0 6px}
+aside a{color:var(--fg)}aside a:hover{color:var(--accent)}
+aside img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:3px}
+aside figure{margin:0}aside figcaption{font-size:12px;margin-top:6px}
+@media(max-width:1179px){aside{display:none}}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;text-underline-offset:3px}
 h1{font-size:32px;font-weight:600;line-height:1.15;margin:0 0 6px;letter-spacing:-.015em}
 h2{display:flex;align-items:center;gap:16px;font:500 12px/1 "IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:56px 0 18px}
@@ -186,7 +195,15 @@ footer{margin-top:64px;padding-top:18px;border-top:1px solid var(--line);font:13
 @media(max-width:600px){h1{font-size:26px}.row{grid-template-columns:1fr}.row .when{white-space:normal}ol.projects li{grid-template-columns:30px 1fr}.tag{grid-column:2;padding-top:0}}
 """
 
-def page(title, body, depth=0, path="/", description=None):
+ASIDE = f"""<aside>
+<section><h2>Now</h2><p>Fall 2026 at Hopkins: Digital Signal Processing, Robot Sensors and Actuators, Probability and Statistics.</p><p>Evenings go to Scrawl AI and the Luo Lab bench.</p></section>
+<section><h2>Ask me about</h2><ul><li>Zinc-ion battery electrodeposition</li><li>Rendering equations in someone's handwriting</li><li>Current-mode CMOS pattern banks</li><li>Running VASP on a Slurm cluster</li><li>Finding zero sets with Gaussian processes</li></ul></section>
+<section><h2>Places</h2><p>Grew up in Southern California. Now Baltimore, with a summer in Newark, CA (Lucid) and one in Madrid (ICAI).</p></section>
+<section><figure><img src="/assets/lab_detail_small.jpg" alt="Electrodeposition bench in the Luo Lab" loading="lazy"><figcaption>The electrodeposition bench in the Luo Lab.</figcaption></figure></section>
+<section><h2>Elsewhere</h2><ul><li><a href="{GH}">GitHub</a></li><li><a href="https://www.linkedin.com/in/harrygzhang/">LinkedIn</a></li><li><a href="https://scrawlai.app/">scrawlai.app</a></li><li><a href="mailto:{EMAIL}">{EMAIL}</a></li></ul></section>
+</aside>"""
+
+def page(title, body, depth=0, path="/", description=None, aside=""):
     description = description or f"{NAME}, electrical engineering at Johns Hopkins: lab automation, mixed-signal circuits, embedded firmware and backend software."
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -198,10 +215,10 @@ def page(title, body, depth=0, path="/", description=None):
 <link rel="canonical" href="{SITE}{path}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css?v=6"></head><body><main>
+<link rel="stylesheet" href="/style.css?v=7"></head><body><div class="page"><main>
 {body}
 <footer><span>{NAME}</span><a href="mailto:{EMAIL}">{EMAIL}</a><a href="mailto:{EMAIL2}">{EMAIL2}</a><a href="{GH}">GitHub</a><a href="https://www.linkedin.com/in/harrygzhang/">LinkedIn</a><span>Updated November 2026</span></footer>
-</main></body></html>"""
+</main>{aside}</div></body></html>"""
 
 def esc(s): return html.escape(s)
 
@@ -233,7 +250,7 @@ document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('clic
  const f=b.dataset.f;document.querySelectorAll('.filters button').forEach(x=>x.setAttribute('aria-pressed',x===b));
  document.querySelectorAll('ol.projects li').forEach(li=>li.classList.toggle('hide',f!=='all'&&li.dataset.tag!==f));}}));
 </script>"""
-    return page(NAME, body)
+    return page(NAME, body, aside=ASIDE)
 
 def work(p):
     res = "".join(f'<div><b>{esc(a)}</b><span>{esc(b)}</span></div>' for a, b in p["results"])
