@@ -1,17 +1,22 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Black-box zero-set sampler · Harry Zhang</title>
-<meta name="description" content="Harry Zhang, electrical engineering at Johns Hopkins: lab automation, mixed-signal circuits, embedded firmware and backend software.">
+<title>Black-box zero-set sampler · Guohan Harry Zhang</title>
+<meta name="description" content="Active-learning Gaussian process that finds where an unknown function crosses zero with 10 to 90 times fewer evaluations.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Black-box zero-set sampler · Guohan Harry Zhang"><meta property="og:description" content="Active-learning Gaussian process that finds where an unknown function crosses zero with 10 to 90 times fewer evaluations.">
+<meta property="og:url" content="https://guohanharryzhang.github.io/work/zero-set-finder/"><meta property="og:type" content="website">
+<link rel="canonical" href="https://guohanharryzhang.github.io/work/zero-set-finder/">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../style.css"></head><body><main>
-<a class="back" href="/">← Harry Zhang</a>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css"></head><body><main>
+<p class="crumb"><a href="/">Guohan Harry Zhang</a><span>/</span><span>Numerical methods</span></p>
 <h1>Black-box zero-set sampler</h1><p class="kicker">Independent research project | May to June 2026</p>
 <p class="lede">Given a function you can only evaluate point by point, find the surface where it equals zero. Three versions: Sobol seeding with bisection, a gradient-rescue variant, and an active-learning Gaussian-process surrogate that picks the next query by the U-score |mu|/sigma and validates every returned point on the real function.</p>
 <div class="results"><div><b>11x to 92x</b><span>fewer function evaluations than the sampling baseline, n = 2 to 6</span></div><div><b>1e-8</b><span>boundary residual |F| in all dimensions</span></div></div>
 <h2>What I did</h2><ul class="work"><li>Implemented all three samplers plus a shared bisection and Sobol toolkit in about 200 lines each.</li><li>Built the benchmark and figure scripts, pytest suites and the write-up with the derivations.</li><li>Documented the limits: smoothness assumption of the Matern kernel and the cubic GP cost above a few thousand points.</li></ul>
 <figure><img src="/assets/fig_v3_vs_v2.png" alt="Evaluations and wall time, v2 vs v3, on the unit sphere in 2 to 6 dimensions." loading="lazy"><figcaption>Evaluations and wall time, v2 vs v3, on the unit sphere in 2 to 6 dimensions.</figcaption></figure><figure><img src="/assets/demo_v3_walkthrough.png" alt="v3 on x^2 + y^2 - 3: Sobol seeds, active-learning rounds, extracted boundary." loading="lazy"><figcaption>v3 on x^2 + y^2 - 3: Sobol seeds, active-learning rounds, extracted boundary.</figcaption></figure>
 <p class="tools"><b>Tools:</b> Python, NumPy, SciPy, scikit-learn, matplotlib, pytest</p>
-<p><a href="https://github.com/guohanharryzhang/zero-set-finder">zero-set-finder on GitHub ↗</a></p>
-<footer>Guohan (Harry) Zhang · <a href="mailto:gzhang45@jh.edu">gzhang45@jh.edu</a> · <a href="https://github.com/guohanharryzhang">GitHub</a> · <a href="https://www.linkedin.com/in/harrygzhang/">LinkedIn</a> · Updated November 2026</footer>
+<p><a href="https://github.com/guohanharryzhang/zero-set-finder">zero-set-finder on GitHub</a></p>
+<p class="next"><a href="/">All work</a><a href="/work/ultrasonic-transducer-enclosure/">Next: Ultrasonic transducer and driver-board enclosure →</a></p>
+<footer><span>Guohan Harry Zhang</span><a href="mailto:gzhang45@jh.edu">gzhang45@jh.edu</a><a href="https://github.com/guohanharryzhang">GitHub</a><a href="https://www.linkedin.com/in/harrygzhang/">LinkedIn</a><span>Updated November 2026</span></footer>
 </main></body></html>

@@ -1,17 +1,22 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Scrawl AI · Harry Zhang</title>
-<meta name="description" content="Harry Zhang, electrical engineering at Johns Hopkins: lab automation, mixed-signal circuits, embedded firmware and backend software.">
+<title>Scrawl AI · Guohan Harry Zhang</title>
+<meta name="description" content="Extracts your handwriting from your own work, solves uploaded problems and renders the solutions in your handwriting. Web and iOS.">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Scrawl AI · Guohan Harry Zhang"><meta property="og:description" content="Extracts your handwriting from your own work, solves uploaded problems and renders the solutions in your handwriting. Web and iOS.">
+<meta property="og:url" content="https://guohanharryzhang.github.io/work/scrawl-ai/"><meta property="og:type" content="website">
+<link rel="canonical" href="https://guohanharryzhang.github.io/work/scrawl-ai/">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../style.css"></head><body><main>
-<a class="back" href="/">← Harry Zhang</a>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css"></head><body><main>
+<p class="crumb"><a href="/">Guohan Harry Zhang</a><span>/</span><span>Product</span></p>
 <h1>Scrawl AI</h1><p class="kicker">Sole creator, developer and operator | Launched 2026 | About 300 paying customers</p>
 <p class="lede">Scrawl takes photos or PDFs of a user&#x27;s handwritten work, builds a personal glyph library, and renders typed or solved content back in that handwriting, including equations and diagrams. I built the extraction and rendering engines, the web and iOS apps, billing, hosting and the marketing.</p>
 <div class="results"><div><b>~300</b><span>paying customers</span></div><div><b>2</b><span>clients, Next.js and SwiftUI, on one FastAPI backend</span></div></div>
 <h2>What I did</h2><ul class="work"><li>Extraction: PaddleOCR line detection, OpenCV glyph splitting and vision-model crop classification into editable per-user libraries.</li><li>Rendering: LaTeX and PyMuPDF layout drives glyph placement; correlated variation in slant, spacing and baseline; stretched brackets, fraction bars and redrawn vector paths for diagrams.</li><li>Backend: asynchronous job pool with stage timing and failure categories, glyph and raster caches, parallel crop classification.</li><li>Billing: Stripe and StoreKit entitlements with atomic credit reservations and idempotent purchase grants; pytest and XCTest coverage for timeouts, duplicate payment events and race conditions.</li><li>Discovery: crawlable sample pages, JSON-LD, sitemaps, RSS and llms.txt.</li></ul>
 <figure><img src="/assets/scrawl_circuit_example.png" alt="Demo output: a circuit rendered in a user&#x27;s handwriting. Not customer data." loading="lazy"><figcaption>Demo output: a circuit rendered in a user&#x27;s handwriting. Not customer data.</figcaption></figure><figure><img src="/assets/scrawl_equation_detail.png" alt="Demo output: equation detail." loading="lazy"><figcaption>Demo output: equation detail.</figcaption></figure>
 <p class="tools"><b>Tools:</b> Python, FastAPI, Next.js, TypeScript, SwiftUI, PaddleOCR, OpenCV, PyMuPDF, Stripe, StoreKit, Docker, Fly.io, Vercel</p>
-<p><a href="https://scrawlai.app/">scrawlai.app ↗</a></p>
-<footer>Guohan (Harry) Zhang · <a href="mailto:gzhang45@jh.edu">gzhang45@jh.edu</a> · <a href="https://github.com/guohanharryzhang">GitHub</a> · <a href="https://www.linkedin.com/in/harrygzhang/">LinkedIn</a> · Updated November 2026</footer>
+<p><a href="https://scrawlai.app/">scrawlai.app</a></p>
+<p class="next"><a href="/">All work</a><a href="/work/cmos-keyword-spotting/">Next: CMOS keyword-spotting circuits →</a></p>
+<footer><span>Guohan Harry Zhang</span><a href="mailto:gzhang45@jh.edu">gzhang45@jh.edu</a><a href="https://github.com/guohanharryzhang">GitHub</a><a href="https://www.linkedin.com/in/harrygzhang/">LinkedIn</a><span>Updated November 2026</span></footer>
 </main></body></html>
