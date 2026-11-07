@@ -8,6 +8,7 @@ SITE = "https://guohanharryzhang.github.io"
 GH = "https://github.com/guohanharryzhang"
 LI = "https://www.linkedin.com/in/harrygzhang/"
 EMAIL = "gzhang45@jh.edu"
+EMAIL2 = "gzhang2006.mg21@gmail.com"
 DESC = ("Guohan Harry Zhang, electrical engineering at Johns Hopkins: lab automation, "
         "mixed-signal circuits, embedded firmware and the software that runs them.")
 
@@ -250,7 +251,7 @@ def page(title, body, path="/", description=DESC):
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css"></head><body><main>
 {body}
-<footer><span>{NAME}</span><a href="mailto:{EMAIL}">{EMAIL}</a><a href="{GH}">GitHub</a><a href="{LI}">LinkedIn</a><span>Updated November 2026</span></footer>
+<footer><span>{NAME}</span><a href="mailto:{EMAIL}">{EMAIL}</a><a href="mailto:{EMAIL2}">{EMAIL2}</a><a href="{GH}">GitHub</a><a href="{LI}">LinkedIn</a><span>Updated November 2026</span></footer>
 </main></body></html>"""
 
 def thumb_path(p):
@@ -288,7 +289,7 @@ def index():
 <h2>Teaching</h2><div class="rows">{teach}</div>
 <h2>Honors</h2><ul class="honors">{honors}</ul>
 <h2>Contact</h2><p class="contact">Looking for Summer 2027 internships in electrical, manufacturing, robotics, semiconductor and software engineering. Open to relocation anywhere in the United States.</p>
-<p class="contact"><a href="mailto:{EMAIL}">{EMAIL}</a></p>"""
+<p class="contact"><a href="mailto:{EMAIL}">{EMAIL}</a> · <a href="mailto:{EMAIL2}">{EMAIL2}</a></p>"""
     return page(NAME, body)
 
 def work(p, nxt):
