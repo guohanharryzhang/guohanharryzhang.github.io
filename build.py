@@ -156,7 +156,7 @@ aside img{display:block;width:100%;height:auto;border:1px solid var(--line);bord
 aside figure{margin:0}aside figcaption{font-size:12px;margin-top:6px}
 aside .clock{font:500 22px/1.2 "IBM Plex Mono",ui-monospace,monospace;color:var(--fg);margin:0 0 4px;font-variant-numeric:tabular-nums}
 aside .small{font-size:12px;margin:0 0 6px}
-aside canvas{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:3px;background:var(--soft);margin:0 0 8px}aside canvas.grab{cursor:grab;touch-action:none}aside canvas.grab:active{cursor:grabbing}
+aside canvas{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:3px;background:var(--soft);margin:0 0 8px}aside canvas.arm{touch-action:none;margin:0}
 @media(max-width:1179px){aside{display:none}}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;text-underline-offset:3px}
 h1{font-size:32px;font-weight:600;line-height:1.15;margin:0 0 6px;letter-spacing:-.015em}
@@ -202,52 +202,34 @@ footer{margin-top:64px;padding-top:18px;border-top:1px solid var(--line);font:13
 """
 
 ASIDE = f"""<aside>
-<section><h2>Baltimore</h2><p class="clock" id="clock">--:--:--</p><p class="small" id="clocknote"></p></section>
-<section><h2>Scope</h2><canvas id="scope" width="480" height="220"></canvas><p class="small" id="scopen"></p></section>
-<section><h2>Satellite</h2><canvas id="sat" class="grab" width="480" height="220"></canvas><p class="small">Drag to spin.</p></section>
-<section><h2>Countdown</h2><p class="clock" id="grad"></p><p class="small">days until graduation, May 2028.</p></section>
+<section><h2>Robot arm</h2><canvas id="arm" class="arm" width="480" height="340"></canvas><p class="small">Follows your cursor.</p></section>
 </aside>
 <script>
 (function(){{
-const z=document.getElementById('clock'),zn=document.getElementById('clocknote');
-function tick(){{const d=new Date();z.textContent=d.toLocaleTimeString('en-US',{{timeZone:'America/New_York',hour:'2-digit',minute:'2-digit',second:'2-digit'}});
-const h=+d.toLocaleString('en-US',{{timeZone:'America/New_York',hour:'numeric',hour12:false}});zn.textContent=h<7?'Probably asleep.':h<9?'Coffee.':h<18?'In class or in the lab.':h<23?'Working on Scrawl.':'Should be asleep.';}}
-tick();setInterval(tick,1000);
-const css=getComputedStyle(document.documentElement),acc=css.getPropertyValue('--accent').trim(),mut=css.getPropertyValue('--muted').trim(),soft=css.getPropertyValue('--soft').trim();
-document.getElementById('grad').textContent=Math.max(0,Math.ceil((new Date('2028-05-25T00:00:00-04:00')-new Date())/864e5)).toLocaleString();
-
-/* oscilloscope in X-Y mode: the beam traces a Lissajous figure while the frequency ratio drifts */
-const sc=document.getElementById('scope'),sg=sc.getContext('2d'),sn=document.getElementById('scopen'),W=sc.width,H=sc.height;
-const ratios=[[1,1],[1,2],[2,3],[3,4],[3,5],[4,5]];let ri=3,a=2,b=3,ta=3,tb=4,ph=0,t=0,hold=420;
-const trail=[];const TL=900;for(let i=0;i<TL;i++){{t+=.011;trail.push([W/2+Math.sin(a*t)*W*.4,H/2+Math.sin(b*t)*H*.4]);}}
-function grat(){{sg.fillStyle=soft;sg.fillRect(0,0,W,H);sg.strokeStyle=mut;sg.globalAlpha=.18;sg.lineWidth=1;sg.beginPath();
-for(let i=1;i<10;i++){{const x=W*i/10;sg.moveTo(x,0);sg.lineTo(x,H);}}for(let i=1;i<8;i++){{const y=H*i/8;sg.moveTo(0,y);sg.lineTo(W,y);}}sg.stroke();
-sg.globalAlpha=.45;sg.beginPath();sg.moveTo(W/2,0);sg.lineTo(W/2,H);sg.moveTo(0,H/2);sg.lineTo(W,H/2);sg.stroke();sg.globalAlpha=1;}}
-function scope(){{if(hold>0)hold--;else{{a+=(ta-a)*.02;b+=(tb-b)*.02;if(Math.abs(ta-a)<.002&&Math.abs(tb-b)<.002){{a=ta;b=tb;hold=420;ri=(ri+1)%ratios.length;[ta,tb]=ratios[ri];}}}}
-ph+=.012;for(let k=0;k<6;k++){{t+=.011;trail.push([W/2+Math.sin(a*t+ph)*W*.4,H/2+Math.sin(b*t)*H*.4]);}}while(trail.length>TL)trail.shift();
-grat();sg.lineCap='round';sg.lineJoin='round';sg.shadowColor=acc;
-for(let i=1;i<trail.length;i++){{const f=i/trail.length;sg.globalAlpha=f*f;sg.lineWidth=1.2+f*1.6;sg.shadowBlur=f*8;sg.strokeStyle=acc;sg.beginPath();sg.moveTo(trail[i-1][0],trail[i-1][1]);sg.lineTo(trail[i][0],trail[i][1]);sg.stroke();}}
-sg.globalAlpha=1;sg.shadowBlur=0;const r=ratios[hold>0?ri===0?ratios.length-1:ri-1:ri];sn.textContent='X-Y mode, '+(hold>0?r[0]+':'+r[1]:'retuning');requestAnimationFrame(scope);}}
-scope();
-
-/* wireframe satellite: body, two panels, boom and dish; drag to spin */
-const sv=document.getElementById('sat'),vg=sv.getContext('2d'),P=[],E=[];
-function pt(x,y,z){{P.push([x,y,z]);return P.length-1;}}function ln(i,j){{E.push([i,j]);}}
-const c=[];for(const x of[-1,1])for(const y of[-1,1])for(const z of[-1,1])c.push(pt(x*.9,y*.9,z*.9));
-for(let i=0;i<8;i++)for(let j=i+1;j<8;j++){{let d=0;for(let k=0;k<3;k++)d+=P[c[i]][k]!==P[c[j]][k];if(d===1)ln(c[i],c[j]);}}
-for(const s of[-1,1]){{const x0=1.3*s,x1=4.2*s,q=[pt(x0,-.7,0),pt(x1,-.7,0),pt(x1,.7,0),pt(x0,.7,0)];for(let i=0;i<4;i++)ln(q[i],q[(i+1)%4]);
-for(let k=1;k<4;k++){{const x=x0+(x1-x0)*k/4;ln(pt(x,-.7,0),pt(x,.7,0));}}ln(pt(x0,0,0),pt(x1,0,0));ln(pt(.9*s,0,0),pt(x0,0,0));}}
-const b0=pt(0,.9,0),b1=pt(0,1.7,0);ln(b0,b1);const ring=[];for(let i=0;i<12;i++){{const th=i/12*Math.PI*2;ring.push(pt(Math.cos(th)*.55,1.7,Math.sin(th)*.55));}}
-for(let i=0;i<12;i++){{ln(ring[i],ring[(i+1)%12]);if(i%3===0)ln(ring[i],b1);}}
-let rx=.35,ry=.6,vx=0,vy=.006,drag=null;
-function proj(p){{const cy=Math.cos(ry),sy=Math.sin(ry),cx=Math.cos(rx),sx=Math.sin(rx);let x=p[0]*cy+p[2]*sy,z=-p[0]*sy+p[2]*cy,y=p[1];const y2=y*cx-z*sx;z=y*sx+z*cx;const f=7/(7+z);return[sv.width/2+x*f*38,sv.height/2-y2*f*38,z];}}
-function sat(){{if(!drag){{ry+=vy;rx+=vx;vx*=.95;vy+=(.006-vy)*.02;}}vg.clearRect(0,0,sv.width,sv.height);const Q=P.map(proj);vg.lineCap='round';
-for(const[i,j]of E){{const d=(Q[i][2]+Q[j][2])/2;vg.globalAlpha=.4+.6*(d+3)/6;vg.lineWidth=1+(d+3)/6;vg.strokeStyle=acc;vg.beginPath();vg.moveTo(Q[i][0],Q[i][1]);vg.lineTo(Q[j][0],Q[j][1]);vg.stroke();}}
-vg.globalAlpha=1;requestAnimationFrame(sat);}}
-sv.addEventListener('pointerdown',e=>{{drag=[e.clientX,e.clientY];sv.setPointerCapture(e.pointerId);}});
-sv.addEventListener('pointermove',e=>{{if(!drag)return;const dx=e.clientX-drag[0],dy=e.clientY-drag[1];ry+=dx*.01;rx+=dy*.01;vy=dx*.01;vx=dy*.01;drag=[e.clientX,e.clientY];}});
-const up=()=>{{drag=null;}};sv.addEventListener('pointerup',up);sv.addEventListener('pointercancel',up);
-sat();
+const css=getComputedStyle(document.documentElement),acc=css.getPropertyValue('--accent').trim(),mut=css.getPropertyValue('--muted').trim(),fg=css.getPropertyValue('--fg').trim(),line=css.getPropertyValue('--line').trim();
+const cv=document.getElementById('arm'),g=cv.getContext('2d'),W=cv.width,H=cv.height,BX=W/2,BY=H-46,L1=150,L2=125;
+let tx=BX+90,ty=BY-170,a1=-Math.PI/2,a2=0.9,grip=1,last=0,seen=false;
+function lerpA(a,b,k){{let d=b-a;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;return a+d*k;}}
+function ik(x,y){{let dx=x-BX,dy=y-BY,d=Math.hypot(dx,dy);const mn=Math.abs(L1-L2)+2,mx=L1+L2-2,cl=Math.min(mx,Math.max(mn,d));dx*=cl/d;dy*=cl/d;
+let c=(cl*cl-L1*L1-L2*L2)/(2*L1*L2);c=Math.max(-1,Math.min(1,c));const e=Math.acos(c)*(dx<0?1:-1);const b=Math.atan2(dy,dx)-Math.atan2(L2*Math.sin(e),L1+L2*Math.cos(e));return[b,e,d<=mx];}}
+function frame(t){{if(!seen||t-last>5000){{const u=t/1000;tx=BX+Math.sin(u*.45)*170;ty=BY-150+Math.sin(u*.9)*70;}}
+const[b,e,reach]=ik(tx,ty);a1=lerpA(a1,b,.12);a2=lerpA(a2,e,.12);grip+=((reach?0:1)-grip)*.15;
+const x1=BX+Math.cos(a1)*L1,y1=BY+Math.sin(a1)*L1,x2=x1+Math.cos(a1+a2)*L2,y2=y1+Math.sin(a1+a2)*L2;
+g.clearRect(0,0,W,H);
+g.strokeStyle=line;g.lineWidth=1;g.setLineDash([3,5]);g.beginPath();g.arc(BX,BY,L1+L2,Math.PI,2*Math.PI);g.stroke();g.setLineDash([]);
+g.fillStyle=line;g.beginPath();g.moveTo(BX-70,H-16);g.lineTo(BX+70,H-16);g.lineTo(BX+40,BY+4);g.lineTo(BX-40,BY+4);g.closePath();g.fill();
+g.lineCap='round';g.lineJoin='round';
+g.strokeStyle=mut;g.lineWidth=14;g.beginPath();g.moveTo(BX,BY);g.lineTo(x1,y1);g.stroke();
+g.strokeStyle=acc;g.lineWidth=10;g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();
+for(const[x,y,r]of[[BX,BY,11],[x1,y1,8]]){{g.fillStyle='#1b1917';g.beginPath();g.arc(x,y,r,0,7);g.fill();g.strokeStyle=fg;g.lineWidth=2;g.stroke();}}
+const h=a1+a2,o=.45+grip*.55,fl=16;g.strokeStyle=fg;g.lineWidth=3;
+for(const sgn of[-1,1]){{const px=x2+Math.cos(h+sgn*Math.PI/2)*5,py=y2+Math.sin(h+sgn*Math.PI/2)*5;const qx=px+Math.cos(h+sgn*o)*fl,qy=py+Math.sin(h+sgn*o)*fl;g.beginPath();g.moveTo(x2,y2);g.lineTo(px,py);g.lineTo(qx,qy);g.lineTo(qx+Math.cos(h)*6,qy+Math.sin(h)*6);g.stroke();}}
+if(seen&&t-last<=5000&&reach){{g.strokeStyle=acc;g.globalAlpha=.6;g.lineWidth=1.5;g.beginPath();g.arc(tx,ty,6,0,7);g.stroke();g.globalAlpha=1;}}
+requestAnimationFrame(frame);}}
+function aim(cx,cy){{const r=cv.getBoundingClientRect(),k=W/r.width;tx=(cx-r.left)*k;ty=(cy-r.top)*k;seen=true;last=performance.now();}}
+window.addEventListener('pointermove',e=>aim(e.clientX,e.clientY),{{passive:true}});
+cv.addEventListener('pointerdown',e=>aim(e.clientX,e.clientY));
+requestAnimationFrame(frame);
 }})();
 </script>"""
 
@@ -263,7 +245,7 @@ def page(title, body, depth=0, path="/", description=None, aside=""):
 <link rel="canonical" href="{SITE}{path}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css?v=9"></head><body><div class="page"><main>
+<link rel="stylesheet" href="/style.css?v=10"></head><body><div class="page"><main>
 {body}
 <footer><span>{NAME}</span><a href="mailto:{EMAIL}">{EMAIL}</a><a href="mailto:{EMAIL2}">{EMAIL2}</a><a href="{GH}">GitHub</a><a href="https://www.linkedin.com/in/harrygzhang/">LinkedIn</a><span>Updated November 2026</span></footer>
 </main>{aside}</div></body></html>"""

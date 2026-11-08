@@ -12,7 +12,7 @@ aside img{display:block;width:100%;height:auto;border:1px solid var(--line);bord
 aside figure{margin:0}aside figcaption{font-size:12px;margin-top:6px}
 aside .clock{font:500 22px/1.2 "IBM Plex Mono",ui-monospace,monospace;color:var(--fg);margin:0 0 4px;font-variant-numeric:tabular-nums}
 aside .small{font-size:12px;margin:0 0 6px}
-aside canvas{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:3px;background:var(--soft);margin:0 0 8px}aside canvas.grab{cursor:grab;touch-action:none}aside canvas.grab:active{cursor:grabbing}
+aside canvas{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:3px;background:var(--soft);margin:0 0 8px}aside canvas.arm{touch-action:none;margin:0}
 @media(max-width:1179px){aside{display:none}}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;text-underline-offset:3px}
 h1{font-size:32px;font-weight:600;line-height:1.15;margin:0 0 6px;letter-spacing:-.015em}
