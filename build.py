@@ -28,7 +28,7 @@ PAST = [
 PROJECTS = [
  dict(slug="zinc-electrodeposition-automation", title="Zinc electrodeposition automation", tag="hardware",
   kicker="Luo Research Lab, Johns Hopkins | Spring 2025 to present",
-  one="OT-2 robot, NI DAQ waveform and valve control, ultrasonic actuation and custom fixtures; 300% higher synthesis throughput.",
+  one="OT-2 robot, NI DAQ waveform and valve control, ultrasonic actuation and custom fixtures; 300% higher synthesis throughput across 50+ trials.",
   intro="Professor Yuting Luo's group studies zinc-ion batteries. The deposition experiments were slow because every trial needed a person to handle additives, run the pumps and swap electrodes. I helped turn that into an automated workflow.",
   results=[("300%","higher synthesis throughput"),("50+","experimental trials on the automated setup"),("80%","shorter hardware-iteration lead time")],
   work=["Integrated Opentrons OT-2 robotics with ultrasonic actuation so deposition cycles run without manual handling.",
@@ -43,7 +43,7 @@ PROJECTS = [
 
  dict(slug="ultrasonic-transducer-enclosure", title="Ultrasonic transducer and driver-board enclosure", tag="hardware",
   kicker="Luo Research Lab | January 2026",
-  one="Fusion enclosure with a driver-board cavity, wire openings and a transducer support; assembly and cutaway views.",
+  one="Fusion enclosure that holds the driver board, routes the wiring and supports the transducer; assembly and cutaway views presented to the lab.",
   intro="The ultrasonic transducer and its driver board sat loose on the bench. I designed an enclosure that holds the board, routes the wiring and supports the transducer at the working position, and presented the design to the lab.",
   results=[],
   work=["Modeled the enclosure in Autodesk Fusion with a driver-board cavity, wire openings and a transducer support.",
@@ -54,7 +54,7 @@ PROJECTS = [
 
  dict(slug="cmos-keyword-spotting", title="CMOS keyword-spotting circuits", tag="hardware",
   kicker="Introduction to VLSI, Johns Hopkins | Spring 2026 | Team project with Andrew Chae",
-  one="Mixed-signal keyword detector in gpdk045: shift registers, current-mode banks and a threshold stage, simulated in Spectre.",
+  one="Mixed-signal keyword detector in gpdk045, simulated in Spectre: 755 mV output on the matched word against 272 mV anti-matched.",
   intro="A schematic-level audio keyword detector. Two 1,024-stage shift registers feed weighted current-mode banks, and a threshold block flags a matched pattern. Designed in Cadence Virtuoso and simulated in Spectre with the gpdk045 kit.",
   results=[("755 mV","matched input"),("272 mV","anti-matched input"),("526 mV","all taps active")],
   work=["Implemented transmission gates, inverters and flip-flops, then built the two 1,024-stage shift registers.",
@@ -69,7 +69,7 @@ PROJECTS = [
 
  dict(slug="zero-set-finder", title="Black-box zero-set sampler", tag="software",
   kicker="Independent research project | May to June 2026",
-  one="Active-learning Gaussian process that finds where an unknown function crosses zero with 10 to 90 times fewer evaluations.",
+  one="Active-learning Gaussian process that finds where an unknown function crosses zero with 11x to 92x fewer evaluations than the sampling baseline.",
   intro="Given a function you can only evaluate point by point, find the surface where it equals zero. Three versions: Sobol seeding with bisection, a gradient-rescue variant, and an active-learning Gaussian-process surrogate that picks the next query by the U-score |mu|/sigma and validates every returned point on the real function.",
   results=[("11x to 92x","fewer function evaluations than the sampling baseline, n = 2 to 6"),("1e-8","boundary residual |F| in all dimensions")],
   work=["Implemented all three samplers plus a shared bisection and Sobol toolkit in about 200 lines each.",
@@ -82,7 +82,7 @@ PROJECTS = [
 
  dict(slug="neural-network-topology", title="Neural-network decision-boundary topology", tag="software",
   kicker="Comillas Pontifical University (ICAI), Madrid | May to July 2026",
-  one="Adaptive boundary search (Sobol, Gaussian-process uncertainty, bisection) inside a PyTorch and GUDHI topology pipeline.",
+  one="Adaptive boundary search (Sobol, Gaussian-process uncertainty, bisection) in a PyTorch and GUDHI pipeline; stable boundaries for 892 of 1,000 networks.",
   intro="A team study of the topology of decision boundaries learned by small ReLU networks. Networks are trained on known geometries, their boundaries are extracted, and persistent homology summarizes the result.",
   results=[("1,000","random 2-8-1 ReLU networks in the stored experiment"),("892","with stable detected boundaries; 736 had one component, 154 two, 2 three")],
   work=["Developed the adaptive boundary search using Sobol sampling, Gaussian-process uncertainty and bisection.",
@@ -92,7 +92,7 @@ PROJECTS = [
 
  dict(slug="scrawl-ai", title="Scrawl AI", tag="software",
   kicker="Sole creator, developer and operator | Launched 2026 | About 300 paying customers",
-  one="Extracts your handwriting from your own work, solves uploaded problems and renders the solutions in your handwriting. Web and iOS.",
+  one="Extracts your handwriting from your own work and renders solutions in it. Web and iOS, about 300 paying customers.",
   intro="Scrawl takes photos or PDFs of a user's handwritten work, builds a personal glyph library, and renders typed or solved content back in that handwriting, including equations and diagrams. I built the extraction and rendering engines, the web and iOS apps, billing, hosting and the marketing.",
   results=[("~300","paying customers"),("2","clients, Next.js and SwiftUI, on one FastAPI backend")],
   work=["Extraction: PaddleOCR line detection, OpenCV glyph splitting and vision-model crop classification into editable per-user libraries.",
@@ -107,7 +107,7 @@ PROJECTS = [
 
  dict(slug="vasp-flow", title="vasp-flow: DFT workflow CLI for an HPC cluster", tag="software",
   kicker="Luo Research Lab | March to October 2026",
-  one="Interactive CLI that takes a Materials Project structure to a submitted, monitored VASP job on the Rockfish cluster.",
+  one="CLI that takes a Materials Project structure to a submitted, monitored VASP job on Rockfish; used for a three-facet zinc surface study.",
   intro="Running density-functional-theory calculations by hand meant juggling structure files, four VASP inputs, a Slurm script and SSH. vasp-flow walks through those steps, explains each one, and handles upload, submission and status checks.",
   results=[],
   work=["Materials Project search and structure fetch, POSCAR/KPOINTS/INCAR generation from presets, POTCAR assembly on the cluster.",
@@ -129,7 +129,7 @@ PROJECTS = [
 
  dict(slug="smaller-projects", title="Smaller projects", tag="software",
   kicker="Course and side projects",
-  one="XRD pattern indexer with local LLMs, a bidirectional-LSTM fake-news classifier, and a 74-series baseball scoreboard.",
+  one="XRD pattern indexer with local LLMs, a bidirectional-LSTM fake-news classifier at about 94% test accuracy, and a 74-series baseball scoreboard.",
   intro="",
   results=[],
   work=["XRD indexer: parses PANalytical XRDML files, detects peaks with SciPy, characterizes patterns with a local LLM and supports semantic search over a library. Built for triaging lab diffraction data.",
@@ -163,10 +163,11 @@ p{margin:0 0 12px}
 .row .role{color:var(--muted);font-size:14px;grid-column:1/-1}
 .row .desc{grid-column:1/-1;font-size:15px;margin:4px 0 0}
 ol.projects{list-style:none;padding:0;margin:0;counter-reset:p}
-ol.projects li{display:grid;grid-template-columns:30px 1fr auto;gap:3px 12px;padding:14px 0;border-top:1px solid var(--line);counter-increment:p}
+ol.projects li{display:grid;grid-template-columns:30px 1fr auto 120px;gap:3px 12px;padding:14px 0;align-items:start;border-top:1px solid var(--line);counter-increment:p}
 ol.projects li:first-child{border-top:0}ol.projects li:last-child{border-bottom:1px solid var(--line)}
 ol.projects li::before{content:counter(p,decimal-leading-zero);color:var(--muted);font:13px/1.6 "IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;padding-top:3px}
-ol.projects .one{grid-column:2/-1;font-size:15px;color:var(--muted);margin:0}
+ol.projects .one{grid-column:2/4;font-size:15px;color:var(--muted);margin:0}
+ol.projects .thumb{grid-column:4;grid-row:1/3;display:block;width:120px;height:78px;margin-top:2px}ol.projects .thumb img{display:block;width:100%;height:100%;object-fit:cover;border:1px solid var(--line);border-radius:3px;background:var(--figbg)}a.thumb:hover img{border-color:var(--accent)}
 .tag{font:11px/1.6 "IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:5px;white-space:nowrap}
 .filters{display:flex;gap:18px;margin:0 0 6px;font:13px/1.6 "IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
 .filters button{font:inherit;background:none;color:var(--muted);border:0;border-bottom:1px solid transparent;padding:2px 0;cursor:pointer;letter-spacing:.02em}
@@ -186,10 +187,12 @@ figure{margin:26px 0}figure img{display:block;width:100%;height:auto;border:1px 
 figcaption{font-size:13px;color:var(--muted);margin-top:8px}
 .tools{font-size:14px;color:var(--muted)}
 footer{margin-top:64px;padding-top:18px;border-top:1px solid var(--line);font:13px/1.6 "IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 18px}
-@media(max-width:600px){h1{font-size:26px}.row{grid-template-columns:1fr}.row .when{white-space:normal}ol.projects li{grid-template-columns:30px 1fr}.tag{grid-column:2;padding-top:0}}
+@media(max-width:600px){h1{font-size:26px}.row{grid-template-columns:1fr}.row .when{white-space:normal}ol.projects li{grid-template-columns:30px 1fr 84px}ol.projects .one{grid-column:2/-1}ol.projects .thumb{grid-column:3;grid-row:1/3;width:84px;height:56px}.tag{grid-column:2;padding-top:0}}
 """
 
 ASIDE = ""
+
+THUMBS = {'zinc-electrodeposition-automation': 'zinc.jpg', 'ultrasonic-transducer-enclosure': 'enclosure.jpg', 'cmos-keyword-spotting': 'cmos.jpg', 'zero-set-finder': 'zeroset.jpg', 'scrawl-ai': 'scrawl.jpg', 'cansat-payload': 'cansat.jpg'}
 
 def page(title, body, depth=0, path="/", description=None, aside=""):
     description = description or f"{NAME}, electrical engineering at Johns Hopkins: lab automation, mixed-signal circuits, embedded firmware and backend software."
@@ -203,7 +206,7 @@ def page(title, body, depth=0, path="/", description=None, aside=""):
 <link rel="canonical" href="{SITE}{path}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css?v=11"></head><body><main>
+<link rel="stylesheet" href="/style.css?v=12"></head><body><main>
 {body}
 <footer><span>{NAME}</span><a href="mailto:{EMAIL}">{EMAIL}</a><a href="mailto:{EMAIL2}">{EMAIL2}</a><a href="{GH}">GitHub</a><a href="https://www.linkedin.com/in/harrygzhang/">LinkedIn</a><span>Updated November 2026</span></footer>
 </main></body></html>"""
@@ -220,7 +223,9 @@ def index():
         for o, r, w, href in PAST)
     proj = "".join(
         f'<li data-tag="{p["tag"]}"><h3><a href="/work/{p["slug"]}/">{esc(p["title"])}</a></h3><span class="tag">{p["tag"]}</span>'
-        f'<p class="one">{esc(p["one"])}</p></li>' for p in PROJECTS)
+        f'<p class="one">{esc(p["one"])}</p>'
+        + (f'<a class="thumb" href="/work/{p["slug"]}/" tabindex="-1" aria-hidden="true"><img src="/assets/thumbs/{THUMBS[p["slug"]]}" alt="" width="240" height="156" loading="lazy"></a>' if p["slug"] in THUMBS else '<span class="thumb"></span>')
+        + '</li>' for p in PROJECTS)
     body = f"""
 <header><h1>{NAME}</h1>
 <p class="lede">Electrical engineering at Johns Hopkins (B.S. 2028, Applied Mathematics minor, GPA 3.8). I build lab automation and measurement setups, mixed-signal circuits, embedded firmware, and the backends that run them. U.S. citizen, based in Baltimore.</p>
