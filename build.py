@@ -218,7 +218,7 @@ document.getElementById('grad').textContent=Math.max(0,Math.ceil((new Date('2028
 
 /* oscilloscope in X-Y mode: the beam traces a Lissajous figure while the frequency ratio drifts */
 const sc=document.getElementById('scope'),sg=sc.getContext('2d'),sn=document.getElementById('scopen'),W=sc.width,H=sc.height;
-const ratios=[[1,1],[1,2],[2,3],[3,4],[3,5],[4,5]];let ri=2,a=2,b=3,ta=2,tb=3,ph=0,t=0,hold=420;
+const ratios=[[1,1],[1,2],[2,3],[3,4],[3,5],[4,5]];let ri=3,a=2,b=3,ta=3,tb=4,ph=0,t=0,hold=420;
 const trail=[];const TL=900;for(let i=0;i<TL;i++){{t+=.011;trail.push([W/2+Math.sin(a*t)*W*.4,H/2+Math.sin(b*t)*H*.4]);}}
 function grat(){{sg.fillStyle=soft;sg.fillRect(0,0,W,H);sg.strokeStyle=mut;sg.globalAlpha=.18;sg.lineWidth=1;sg.beginPath();
 for(let i=1;i<10;i++){{const x=W*i/10;sg.moveTo(x,0);sg.lineTo(x,H);}}for(let i=1;i<8;i++){{const y=H*i/8;sg.moveTo(0,y);sg.lineTo(W,y);}}sg.stroke();
