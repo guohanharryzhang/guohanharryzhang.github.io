@@ -146,18 +146,6 @@ CSS = """
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 "IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;padding:0 20px}
 main{max-width:700px;margin:0 auto;padding:60px 0 72px}
-.page{max-width:700px;margin:0 auto}
-@media(min-width:1180px){.page{max-width:1020px;display:grid;grid-template-columns:700px 240px;column-gap:80px;align-items:start}.page main{max-width:none;margin:0;grid-column:1}.page aside{grid-column:2;position:sticky;top:60px;padding-top:60px}}
-aside{font-size:14px;color:var(--muted)}
-aside h2{margin:0 0 12px}aside section{margin:0 0 36px}
-aside p{margin:0 0 8px}aside ul{margin:0;padding:0;list-style:none}aside li{margin:0 0 6px}
-aside a{color:var(--fg)}aside a:hover{color:var(--accent)}
-aside img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:3px}
-aside figure{margin:0}aside figcaption{font-size:12px;margin-top:6px}
-aside .clock{font:500 22px/1.2 "IBM Plex Mono",ui-monospace,monospace;color:var(--fg);margin:0 0 4px;font-variant-numeric:tabular-nums}
-aside .small{font-size:12px;margin:0 0 6px}
-aside canvas{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:3px;background:var(--soft);margin:0 0 8px}aside canvas.arm{touch-action:none;margin:0}
-@media(max-width:1179px){aside{display:none}}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;text-underline-offset:3px}
 h1{font-size:32px;font-weight:600;line-height:1.15;margin:0 0 6px;letter-spacing:-.015em}
 h2{display:flex;align-items:center;gap:16px;font:500 12px/1 "IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:56px 0 18px}
@@ -201,37 +189,7 @@ footer{margin-top:64px;padding-top:18px;border-top:1px solid var(--line);font:13
 @media(max-width:600px){h1{font-size:26px}.row{grid-template-columns:1fr}.row .when{white-space:normal}ol.projects li{grid-template-columns:30px 1fr}.tag{grid-column:2;padding-top:0}}
 """
 
-ASIDE = f"""<aside>
-<section><h2>Robot arm</h2><canvas id="arm" class="arm" width="480" height="340"></canvas><p class="small">Follows your cursor.</p></section>
-</aside>
-<script>
-(function(){{
-const css=getComputedStyle(document.documentElement),acc=css.getPropertyValue('--accent').trim(),mut=css.getPropertyValue('--muted').trim(),fg=css.getPropertyValue('--fg').trim(),line=css.getPropertyValue('--line').trim();
-const cv=document.getElementById('arm'),g=cv.getContext('2d'),W=cv.width,H=cv.height,BX=W/2,BY=H-46,L1=150,L2=125;
-let tx=BX+90,ty=BY-170,a1=-Math.PI/2,a2=0.9,grip=1,last=0,seen=false;
-function lerpA(a,b,k){{let d=b-a;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;return a+d*k;}}
-function ik(x,y){{let dx=x-BX,dy=y-BY,d=Math.hypot(dx,dy);const mn=Math.abs(L1-L2)+2,mx=L1+L2-2,cl=Math.min(mx,Math.max(mn,d));dx*=cl/d;dy*=cl/d;
-let c=(cl*cl-L1*L1-L2*L2)/(2*L1*L2);c=Math.max(-1,Math.min(1,c));const e=Math.acos(c)*(dx<0?1:-1);const b=Math.atan2(dy,dx)-Math.atan2(L2*Math.sin(e),L1+L2*Math.cos(e));return[b,e,d<=mx];}}
-function frame(t){{if(!seen||t-last>5000){{const u=t/1000;tx=BX+Math.sin(u*.45)*170;ty=BY-150+Math.sin(u*.9)*70;}}
-const[b,e,reach]=ik(tx,ty);a1=lerpA(a1,b,.12);a2=lerpA(a2,e,.12);grip+=((reach?0:1)-grip)*.15;
-const x1=BX+Math.cos(a1)*L1,y1=BY+Math.sin(a1)*L1,x2=x1+Math.cos(a1+a2)*L2,y2=y1+Math.sin(a1+a2)*L2;
-g.clearRect(0,0,W,H);
-g.strokeStyle=line;g.lineWidth=1;g.setLineDash([3,5]);g.beginPath();g.arc(BX,BY,L1+L2,Math.PI,2*Math.PI);g.stroke();g.setLineDash([]);
-g.fillStyle=line;g.beginPath();g.moveTo(BX-70,H-16);g.lineTo(BX+70,H-16);g.lineTo(BX+40,BY+4);g.lineTo(BX-40,BY+4);g.closePath();g.fill();
-g.lineCap='round';g.lineJoin='round';
-g.strokeStyle=mut;g.lineWidth=14;g.beginPath();g.moveTo(BX,BY);g.lineTo(x1,y1);g.stroke();
-g.strokeStyle=acc;g.lineWidth=10;g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();
-for(const[x,y,r]of[[BX,BY,11],[x1,y1,8]]){{g.fillStyle='#1b1917';g.beginPath();g.arc(x,y,r,0,7);g.fill();g.strokeStyle=fg;g.lineWidth=2;g.stroke();}}
-const h=a1+a2,o=.45+grip*.55,fl=16;g.strokeStyle=fg;g.lineWidth=3;
-for(const sgn of[-1,1]){{const px=x2+Math.cos(h+sgn*Math.PI/2)*5,py=y2+Math.sin(h+sgn*Math.PI/2)*5;const qx=px+Math.cos(h+sgn*o)*fl,qy=py+Math.sin(h+sgn*o)*fl;g.beginPath();g.moveTo(x2,y2);g.lineTo(px,py);g.lineTo(qx,qy);g.lineTo(qx+Math.cos(h)*6,qy+Math.sin(h)*6);g.stroke();}}
-if(seen&&t-last<=5000&&reach){{g.strokeStyle=acc;g.globalAlpha=.6;g.lineWidth=1.5;g.beginPath();g.arc(tx,ty,6,0,7);g.stroke();g.globalAlpha=1;}}
-requestAnimationFrame(frame);}}
-function aim(cx,cy){{const r=cv.getBoundingClientRect(),k=W/r.width;tx=(cx-r.left)*k;ty=(cy-r.top)*k;seen=true;last=performance.now();}}
-window.addEventListener('pointermove',e=>aim(e.clientX,e.clientY),{{passive:true}});
-cv.addEventListener('pointerdown',e=>aim(e.clientX,e.clientY));
-requestAnimationFrame(frame);
-}})();
-</script>"""
+ASIDE = ""
 
 def page(title, body, depth=0, path="/", description=None, aside=""):
     description = description or f"{NAME}, electrical engineering at Johns Hopkins: lab automation, mixed-signal circuits, embedded firmware and backend software."
@@ -245,10 +203,10 @@ def page(title, body, depth=0, path="/", description=None, aside=""):
 <link rel="canonical" href="{SITE}{path}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css?v=10"></head><body><div class="page"><main>
+<link rel="stylesheet" href="/style.css?v=11"></head><body><main>
 {body}
 <footer><span>{NAME}</span><a href="mailto:{EMAIL}">{EMAIL}</a><a href="mailto:{EMAIL2}">{EMAIL2}</a><a href="{GH}">GitHub</a><a href="https://www.linkedin.com/in/harrygzhang/">LinkedIn</a><span>Updated November 2026</span></footer>
-</main>{aside}</div></body></html>"""
+</main></body></html>"""
 
 def esc(s): return html.escape(s)
 
