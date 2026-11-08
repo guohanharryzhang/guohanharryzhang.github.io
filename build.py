@@ -117,15 +117,15 @@ PROJECTS = [
 
  dict(slug="cansat-payload", title="CanSat competition payload", tag="hardware",
   kicker="AstroJays / SEDS JHU | Team contributor",
-  one="C/C++ firmware for sensor processing, flight-event logging and RF telemetry; accelerometer, barometer and GPS integration.",
-  intro="A soda-can-sized payload for the CanSat competition. I worked on the sensor and firmware side of the team.",
+  one="Minmus flight-computer PCB work plus C/C++ firmware for sensor processing, flight-event logging and RF telemetry.",
+  intro="A soda-can-sized payload for the CanSat competition. I worked on the flight-computer board, the sensors and the firmware.",
   results=[],
   work=["Integrated and calibrated accelerometer, barometer and GPS measurements for descent and impact monitoring.",
         "Wrote C/C++ firmware for sensor-data processing, flight-event logging and RF telemetry.",
-        "The flight computer is the team's Minmus board: an ESP32-WROOM-32 with a BMI088 IMU, ADXL377 high-g accelerometer, BMP390 barometer, SD card slot and USB-C programming. The board was designed by the AstroJays team; my work was on the firmware and sensor side."],
-  figures=[("cansat_minmus_board.jpg","Minmus flight computer, 3D render from the team's board design: ESP32 module, sensors, SD card, USB-C and power. AstroJays team design."),
-           ("cansat_minmus_schematic.png","Minmus schematic: 3.3 V LDO, BMP390 barometer, ADXL377 accelerometer, BMI088 IMU, ESP32, USB-C and SD card. AstroJays team design.")],
-  tools="C, C++, ESP32, BMI088, ADXL377, BMP390, RF telemetry, sensor calibration", links=[]),
+        "The flight computer is the team's Minmus board: an ESP32-WROOM-32 with a BMI088 IMU, ADXL377 high-g accelerometer, BMP390 barometer, SD card slot and USB-C programming. The board is an AstroJays team design that I worked on, alongside the firmware and sensor integration."],
+  figures=[("cansat_minmus_board.jpg","Minmus flight computer, 3D render from the team's board design: ESP32 module, sensors, SD card, USB-C and power. AstroJays team board."),
+           ("cansat_minmus_schematic.png","Minmus schematic: 3.3 V LDO, BMP390 barometer, ADXL377 accelerometer, BMI088 IMU, ESP32, USB-C and SD card. AstroJays team board.")],
+  tools="C, C++, ESP32, BMI088, ADXL377, BMP390, PCB, RF telemetry, sensor calibration", links=[]),
 
  dict(slug="smaller-projects", title="Smaller projects", tag="software",
   kicker="Course and side projects",
@@ -156,9 +156,7 @@ aside img{display:block;width:100%;height:auto;border:1px solid var(--line);bord
 aside figure{margin:0}aside figcaption{font-size:12px;margin-top:6px}
 aside .clock{font:500 22px/1.2 "IBM Plex Mono",ui-monospace,monospace;color:var(--fg);margin:0 0 4px;font-variant-numeric:tabular-nums}
 aside .small{font-size:12px;margin:0 0 6px}
-aside label.small{display:block}aside input[type=range]{display:block;width:100%;margin:6px 0 0;accent-color:var(--accent)}
-aside canvas{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:3px;background:var(--soft);margin:0 0 8px}
-.res{display:flex;align-items:center;margin:4px 0 10px}.res .lead{flex:1;height:2px;background:var(--muted)}.res .body{display:flex;gap:9px;padding:0 12px;height:34px;align-items:center;background:#d8c7a8;border-radius:8px}.res i{display:block;width:9px;height:34px;cursor:pointer}.res i.tol{background:#c9a227;cursor:default;width:7px}
+aside canvas{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:3px;background:var(--soft);margin:0 0 8px}aside canvas.grab{cursor:grab;touch-action:none}aside canvas.grab:active{cursor:grabbing}
 @media(max-width:1179px){aside{display:none}}
 a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline;text-underline-offset:3px}
 h1{font-size:32px;font-weight:600;line-height:1.15;margin:0 0 6px;letter-spacing:-.015em}
@@ -205,10 +203,8 @@ footer{margin-top:64px;padding-top:18px;border-top:1px solid var(--line);font:13
 
 ASIDE = f"""<aside>
 <section><h2>Baltimore</h2><p class="clock" id="clock">--:--:--</p><p class="small" id="clocknote"></p></section>
-<section><h2>Square wave, one harmonic at a time</h2><canvas id="fx" width="480" height="200"></canvas>
-<label class="small"><span id="fxn">5 harmonics</span><input id="fxs" type="range" min="1" max="25" value="5"></label></section>
-<section><h2>Resistor decoder</h2><div class="res" id="res"><span class="lead"></span><span class="body"><i data-b="0"></i><i data-b="1"></i><i data-b="2"></i><i class="tol"></i></span><span class="lead"></span></div>
-<p class="small" id="resv"></p><p class="small">Click a band to change it.</p></section>
+<section><h2>Scope</h2><canvas id="scope" width="480" height="220"></canvas><p class="small" id="scopen"></p></section>
+<section><h2>Satellite</h2><canvas id="sat" class="grab" width="480" height="220"></canvas><p class="small">Drag to spin.</p></section>
 <section><h2>Countdown</h2><p class="clock" id="grad"></p><p class="small">days until graduation, May 2028.</p></section>
 </aside>
 <script>
@@ -217,19 +213,41 @@ const z=document.getElementById('clock'),zn=document.getElementById('clocknote')
 function tick(){{const d=new Date();z.textContent=d.toLocaleTimeString('en-US',{{timeZone:'America/New_York',hour:'2-digit',minute:'2-digit',second:'2-digit'}});
 const h=+d.toLocaleString('en-US',{{timeZone:'America/New_York',hour:'numeric',hour12:false}});zn.textContent=h<7?'Probably asleep.':h<9?'Coffee.':h<18?'In class or in the lab.':h<23?'Working on Scrawl.':'Should be asleep.';}}
 tick();setInterval(tick,1000);
-const c=document.getElementById('fx'),g=c.getContext('2d'),s=document.getElementById('fxs'),n=document.getElementById('fxn');
-const acc=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(),mut=getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();
-function draw(){{const N=+s.value;n.textContent=N+(N===1?' harmonic':' harmonics');g.clearRect(0,0,c.width,c.height);
-g.strokeStyle=mut;g.globalAlpha=.35;g.lineWidth=2;g.beginPath();g.moveTo(0,c.height/2);g.lineTo(c.width,c.height/2);g.stroke();g.globalAlpha=1;
-g.strokeStyle=acc;g.lineWidth=3;g.beginPath();for(let i=0;i<=c.width;i++){{const x=i/c.width*4*Math.PI;let y=0;for(let k=1;k<=N;k++){{const m=2*k-1;y+=Math.sin(m*x)/m;}}
-const py=c.height/2-y*(c.height*0.38);i?g.lineTo(i,py):g.moveTo(i,py);}}g.stroke();}}
-s.addEventListener('input',draw);draw();
-const cols=['black','brown','red','orange','yellow','green','blue','violet','grey','white'],hex=['#111','#6b3a1f','#c0392b','#e67e22','#f1c40f','#27ae60','#2980b9','#8e44ad','#7f8c8d','#ecf0f1'];
-const st=[4,7,2],bands=[...document.querySelectorAll('#res i[data-b]')],out=document.getElementById('resv');
-function fmt(v){{const s=x=>String(parseFloat(x.toPrecision(3)));return v>=1e6?s(v/1e6)+' M\u03a9':v>=1e3?s(v/1e3)+' k\u03a9':s(v)+' \u03a9';}}
-function show(){{bands.forEach((b,i)=>{{b.style.background=hex[st[i]];b.title=cols[st[i]];}});const v=(st[0]*10+st[1])*Math.pow(10,st[2]);out.textContent=cols[st[0]]+', '+cols[st[1]]+', '+cols[st[2]]+', gold: '+fmt(v)+' \u00b15%';}}
-bands.forEach((b,i)=>b.addEventListener('click',()=>{{st[i]=(st[i]+1)%10;show();}}));show();
+const css=getComputedStyle(document.documentElement),acc=css.getPropertyValue('--accent').trim(),mut=css.getPropertyValue('--muted').trim(),soft=css.getPropertyValue('--soft').trim();
 document.getElementById('grad').textContent=Math.max(0,Math.ceil((new Date('2028-05-25T00:00:00-04:00')-new Date())/864e5)).toLocaleString();
+
+/* oscilloscope in X-Y mode: the beam traces a Lissajous figure while the frequency ratio drifts */
+const sc=document.getElementById('scope'),sg=sc.getContext('2d'),sn=document.getElementById('scopen'),W=sc.width,H=sc.height;
+const ratios=[[1,1],[1,2],[2,3],[3,4],[3,5],[4,5]];let ri=2,a=2,b=3,ta=2,tb=3,ph=0,t=0,hold=420;
+const trail=[];const TL=900;for(let i=0;i<TL;i++){{t+=.011;trail.push([W/2+Math.sin(a*t)*W*.4,H/2+Math.sin(b*t)*H*.4]);}}
+function grat(){{sg.fillStyle=soft;sg.fillRect(0,0,W,H);sg.strokeStyle=mut;sg.globalAlpha=.18;sg.lineWidth=1;sg.beginPath();
+for(let i=1;i<10;i++){{const x=W*i/10;sg.moveTo(x,0);sg.lineTo(x,H);}}for(let i=1;i<8;i++){{const y=H*i/8;sg.moveTo(0,y);sg.lineTo(W,y);}}sg.stroke();
+sg.globalAlpha=.45;sg.beginPath();sg.moveTo(W/2,0);sg.lineTo(W/2,H);sg.moveTo(0,H/2);sg.lineTo(W,H/2);sg.stroke();sg.globalAlpha=1;}}
+function scope(){{if(hold>0)hold--;else{{a+=(ta-a)*.02;b+=(tb-b)*.02;if(Math.abs(ta-a)<.002&&Math.abs(tb-b)<.002){{a=ta;b=tb;hold=420;ri=(ri+1)%ratios.length;[ta,tb]=ratios[ri];}}}}
+ph+=.012;for(let k=0;k<6;k++){{t+=.011;trail.push([W/2+Math.sin(a*t+ph)*W*.4,H/2+Math.sin(b*t)*H*.4]);}}while(trail.length>TL)trail.shift();
+grat();sg.lineCap='round';sg.lineJoin='round';sg.shadowColor=acc;
+for(let i=1;i<trail.length;i++){{const f=i/trail.length;sg.globalAlpha=f*f;sg.lineWidth=1.2+f*1.6;sg.shadowBlur=f*8;sg.strokeStyle=acc;sg.beginPath();sg.moveTo(trail[i-1][0],trail[i-1][1]);sg.lineTo(trail[i][0],trail[i][1]);sg.stroke();}}
+sg.globalAlpha=1;sg.shadowBlur=0;const r=ratios[hold>0?ri===0?ratios.length-1:ri-1:ri];sn.textContent='X-Y mode, '+(hold>0?r[0]+':'+r[1]:'retuning');requestAnimationFrame(scope);}}
+scope();
+
+/* wireframe satellite: body, two panels, boom and dish; drag to spin */
+const sv=document.getElementById('sat'),vg=sv.getContext('2d'),P=[],E=[];
+function pt(x,y,z){{P.push([x,y,z]);return P.length-1;}}function ln(i,j){{E.push([i,j]);}}
+const c=[];for(const x of[-1,1])for(const y of[-1,1])for(const z of[-1,1])c.push(pt(x*.9,y*.9,z*.9));
+for(let i=0;i<8;i++)for(let j=i+1;j<8;j++){{let d=0;for(let k=0;k<3;k++)d+=P[c[i]][k]!==P[c[j]][k];if(d===1)ln(c[i],c[j]);}}
+for(const s of[-1,1]){{const x0=1.3*s,x1=4.2*s,q=[pt(x0,-.7,0),pt(x1,-.7,0),pt(x1,.7,0),pt(x0,.7,0)];for(let i=0;i<4;i++)ln(q[i],q[(i+1)%4]);
+for(let k=1;k<4;k++){{const x=x0+(x1-x0)*k/4;ln(pt(x,-.7,0),pt(x,.7,0));}}ln(pt(x0,0,0),pt(x1,0,0));ln(pt(.9*s,0,0),pt(x0,0,0));}}
+const b0=pt(0,.9,0),b1=pt(0,1.7,0);ln(b0,b1);const ring=[];for(let i=0;i<12;i++){{const th=i/12*Math.PI*2;ring.push(pt(Math.cos(th)*.55,1.7,Math.sin(th)*.55));}}
+for(let i=0;i<12;i++){{ln(ring[i],ring[(i+1)%12]);if(i%3===0)ln(ring[i],b1);}}
+let rx=.35,ry=.6,vx=0,vy=.006,drag=null;
+function proj(p){{const cy=Math.cos(ry),sy=Math.sin(ry),cx=Math.cos(rx),sx=Math.sin(rx);let x=p[0]*cy+p[2]*sy,z=-p[0]*sy+p[2]*cy,y=p[1];const y2=y*cx-z*sx;z=y*sx+z*cx;const f=7/(7+z);return[sv.width/2+x*f*38,sv.height/2-y2*f*38,z];}}
+function sat(){{if(!drag){{ry+=vy;rx+=vx;vx*=.95;vy+=(.006-vy)*.02;}}vg.clearRect(0,0,sv.width,sv.height);const Q=P.map(proj);vg.lineCap='round';
+for(const[i,j]of E){{const d=(Q[i][2]+Q[j][2])/2;vg.globalAlpha=.4+.6*(d+3)/6;vg.lineWidth=1+(d+3)/6;vg.strokeStyle=acc;vg.beginPath();vg.moveTo(Q[i][0],Q[i][1]);vg.lineTo(Q[j][0],Q[j][1]);vg.stroke();}}
+vg.globalAlpha=1;requestAnimationFrame(sat);}}
+sv.addEventListener('pointerdown',e=>{{drag=[e.clientX,e.clientY];sv.setPointerCapture(e.pointerId);}});
+sv.addEventListener('pointermove',e=>{{if(!drag)return;const dx=e.clientX-drag[0],dy=e.clientY-drag[1];ry+=dx*.01;rx+=dy*.01;vy=dx*.01;vx=dy*.01;drag=[e.clientX,e.clientY];}});
+const up=()=>{{drag=null;}};sv.addEventListener('pointerup',up);sv.addEventListener('pointercancel',up);
+sat();
 }})();
 </script>"""
 
@@ -245,7 +263,7 @@ def page(title, body, depth=0, path="/", description=None, aside=""):
 <link rel="canonical" href="{SITE}{path}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css?v=8"></head><body><div class="page"><main>
+<link rel="stylesheet" href="/style.css?v=9"></head><body><div class="page"><main>
 {body}
 <footer><span>{NAME}</span><a href="mailto:{EMAIL}">{EMAIL}</a><a href="mailto:{EMAIL2}">{EMAIL2}</a><a href="{GH}">GitHub</a><a href="https://www.linkedin.com/in/harrygzhang/">LinkedIn</a><span>Updated November 2026</span></footer>
 </main>{aside}</div></body></html>"""
